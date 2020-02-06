@@ -9,29 +9,31 @@ public class Phonebook {
     public static ArrayList<String> phoneNumbers = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
+        File file = new File("phonebook.txt");
         Scanner keyboard = new Scanner(System.in);
-        FileWriter filewriter = new FileWriter("phonebook.txt", true);
-        PrintWriter output = new PrintWriter(filewriter);
+        Scanner inputFile = new Scanner(file);
+        FileWriter filewriter = new FileWriter(file, true);
+        BufferedWriter output = new BufferedWriter(filewriter);
         int numberOfEntries = 0;
+        read(inputFile, firstNames, lastNames, phoneNumbers);
         System.out.print("lookup, reverse-lookup, add, or quit (l/r/a/q)?");
         lookup(output, keyboard, numberOfEntries, firstNames, lastNames, phoneNumbers);
     }
 
-    public static int read(ArrayList firstNames, ArrayList lastNames, ArrayList phoneNumbers) throws FileNotFoundException {
-        Scanner file = new Scanner(new File("phonebook.txt"));
+    public static int read(Scanner inputFile, ArrayList firstNames, ArrayList lastNames, ArrayList phoneNumbers) throws FileNotFoundException {
         int counter = 0;
-        while (file.hasNext()) {
-            lastNames.add(file.next());
-            firstNames.add(file.next());
-            phoneNumbers.add(file.next());
+        while (inputFile.hasNext()) {
+            lastNames.add(inputFile.next());
+            firstNames.add(inputFile.next());
+            phoneNumbers.add(inputFile.next());
             counter++;
         }
-        file.close();
+        inputFile.close();
         return counter;
     }
 
-    public static void lookup(PrintWriter output, Scanner keyboard, int numberOfEntries, ArrayList firstNames,
-                              ArrayList lastNames, ArrayList phoneNumbers) {
+    public static void lookup(BufferedWriter output, Scanner keyboard, int numberOfEntries, ArrayList firstNames,
+                              ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
         int numLookups = 0, numRevLookups = 0;
         String numPhone = "", FN = "", LN = "";
         String inputNumPhone, inputFN, inputLN;
@@ -41,7 +43,6 @@ public class Phonebook {
             if (userInput.equals("q"))
                 break;
             else if (userInput.equals("l")) {
-                System.out.print(numberOfEntries+"\n");
                 System.out.print("last name? ");
                 inputLN = keyboard.next();
                 System.out.print("first name? ");
@@ -85,8 +86,6 @@ public class Phonebook {
             } else if (userInput.equals("a")) {
                 add(output, keyboard, firstNames, lastNames, phoneNumbers);
                 numberOfEntries++;
-            } else if (userInput.equals("d")) {
-
             } else {
                 System.out.print("INVALID ENTRY\n");
                 System.out.print("Please enter a new response\n\n");
@@ -97,8 +96,8 @@ public class Phonebook {
         keyboard.close();
     }
 
-    public static void add(PrintWriter output, Scanner keyboard, ArrayList firstNames,
-                           ArrayList lastNames, ArrayList phoneNumbers) {
+    public static void add(BufferedWriter output, Scanner keyboard, ArrayList firstNames,
+                           ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
         System.out.print("enter last name: ");
         lastNames.add(keyboard.next());
         System.out.print("enter first name: ");
@@ -106,7 +105,7 @@ public class Phonebook {
         System.out.print("enter phone number (nnn-nnn-nnnn): ");
         phoneNumbers.add(keyboard.next());
         int element = lastNames.size() - 1;
-        output.println(lastNames.get(element)+ "       " + firstNames.get(element) + "    " + phoneNumbers.get(element));
+        output.write(lastNames.get(element)+ "       " + firstNames.get(element) + "    " + phoneNumbers.get(element));
         System.out.printf("%s, %s has been added to your contact list%n%n",lastNames.get(element), firstNames.get(element));
     }
 }
