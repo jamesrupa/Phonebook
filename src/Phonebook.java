@@ -2,8 +2,23 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Phonebook {
+/**
+ * A phonebook application.
+ * First, it fills parallel arrays with last names, first names, and phone numbers.
+ * Then, it prompts the user to choose what to do - lookup, reverse-lookup, add, and quit.
+ * Depending on what the user chooses, they enter the credentials asked and gives a response.
+ * It keeps doing this until the user indicates they want to stop with the entry of "q".
+ * Lastly, it prints out the number of times the user preforms the action.
+ *
+ * @author James Rupa
+ */
 
+public class Phonebook {
+    /**
+     * Sets up the arrays and calls the read method; then calls the lookup method for as long as the user wishes.
+     *
+     * @param args The array of command-line arguments
+     */
     public static ArrayList<String> firstNames = new ArrayList<>();
     public static ArrayList<String> lastNames = new ArrayList<>();
     public static ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -20,7 +35,18 @@ public class Phonebook {
         lookup(output, keyboard, numberOfEntries, firstNames, lastNames, phoneNumbers);
     }
 
-    public static int read(Scanner inputFile, ArrayList firstNames, ArrayList lastNames, ArrayList phoneNumbers) throws FileNotFoundException {
+    /**
+     * Reads last names, first names, and phone numbers from a file into three seperate arrays.
+     * Keeps count of how many records have been read in.
+     *
+     * @param inputFile The Scanner object that reads from a file
+     * @param firstName The array of first names
+     * @param lastName The array of last names
+     * @param phoneNumber The array of phone numbers
+     *
+     * @return The number of records that were read into the arrays from the file
+     */
+    public static int read(Scanner inputFile, ArrayList firstNames, ArrayList lastNames, ArrayList phoneNumbers) {
         int counter = 0;
         while (inputFile.hasNext()) {
             lastNames.add(inputFile.next());
@@ -32,6 +58,19 @@ public class Phonebook {
         return counter;
     }
 
+    /**
+     * Given an option from the user's input, this method will preform various lookups
+     * whether it is using a last and first name to find a phone number. Or looking up
+     * the phone number to find the first and last names. It can also add an additional
+     * contact into the phonebook. This continously happens until the user enters "q" to quit the program.
+     *
+     * @param output The BufferedWriter object that appends to a file
+     * @param keyboard The Scanner object that reads input from keyboard
+     * @param numberOfEntries The integer/number of entries read into the arrays from the file
+     * @param firstName The array of first names
+     * @param lastName The array of last names
+     * @param phoneNumber The array of phone numbers
+     */
     public static void lookup(BufferedWriter output, Scanner keyboard, int numberOfEntries, ArrayList firstNames,
                               ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
         int numLookups = 0, numRevLookups = 0;
@@ -96,6 +135,17 @@ public class Phonebook {
         keyboard.close();
     }
 
+    /**
+     * Adds an additional contact onto the phonebook. Adding their first name,
+     * last name, and phone number. It then appends into the original file to
+     * update the contact list.
+     *
+     * @param output The BufferedWriter object that appends to a file
+     * @param keyboard The Scanner object that reads input from keyboard
+     * @param firstName The array of first names
+     * @param lastName The array of last names
+     * @param phoneNumber The array of phone numbers
+     */
     public static void add(BufferedWriter output, Scanner keyboard, ArrayList firstNames,
                            ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
         System.out.print("enter last name: ");
