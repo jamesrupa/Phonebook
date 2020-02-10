@@ -27,10 +27,8 @@ public class Phonebook {
         File file = new File("phonebook.txt");
         Scanner keyboard = new Scanner(System.in);
         Scanner inputFile = new Scanner(file);
-        FileWriter filewriter = new FileWriter(file, true);
-        BufferedWriter output = new BufferedWriter(filewriter);
-        int numberOfEntries = 0;
-        read(inputFile, firstNames, lastNames, phoneNumbers);
+        PrintStream output = new PrintStream(new FileOutputStream(file, true));
+        int numberOfEntries = read(inputFile, firstNames, lastNames, phoneNumbers);
         System.out.print("lookup, reverse-lookup, add, or quit (l/r/a/q)?");
         lookup(output, keyboard, numberOfEntries, firstNames, lastNames, phoneNumbers);
     }
@@ -71,8 +69,8 @@ public class Phonebook {
      * @param lastName The array of last names
      * @param phoneNumber The array of phone numbers
      */
-    public static void lookup(BufferedWriter output, Scanner keyboard, int numberOfEntries, ArrayList firstNames,
-                              ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
+    public static void lookup(PrintStream output, Scanner keyboard, int numberOfEntries, ArrayList firstNames,
+                              ArrayList lastNames, ArrayList phoneNumbers) {
         int numLookups = 0, numRevLookups = 0;
         String numPhone = "", FN = "", LN = "";
         String inputNumPhone, inputFN, inputLN;
@@ -95,7 +93,6 @@ public class Phonebook {
                         break;
                     }
                 }
-                System.out.print(numberOfEntries+"\n");
                 if (found) {
                     System.out.printf("%s %s%s %s%n%n", inputFN, inputLN, "'s phone number is", numPhone);
                 } else {
@@ -146,8 +143,8 @@ public class Phonebook {
      * @param lastName The array of last names
      * @param phoneNumber The array of phone numbers
      */
-    public static void add(BufferedWriter output, Scanner keyboard, ArrayList firstNames,
-                           ArrayList lastNames, ArrayList phoneNumbers) throws IOException {
+    public static void add(PrintStream output, Scanner keyboard, ArrayList firstNames,
+                           ArrayList lastNames, ArrayList phoneNumbers) {
         System.out.print("enter last name: ");
         lastNames.add(keyboard.next());
         System.out.print("enter first name: ");
@@ -155,7 +152,7 @@ public class Phonebook {
         System.out.print("enter phone number (nnn-nnn-nnnn): ");
         phoneNumbers.add(keyboard.next());
         int element = lastNames.size() - 1;
-        output.write(lastNames.get(element)+ "       " + firstNames.get(element) + "    " + phoneNumbers.get(element));
+        output.print(lastNames.get(element)+ "       " + firstNames.get(element) + "    " + phoneNumbers.get(element));
         System.out.printf("%s, %s has been added to your contact list%n%n",lastNames.get(element), firstNames.get(element));
     }
 }
